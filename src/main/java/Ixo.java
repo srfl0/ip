@@ -4,6 +4,12 @@ public class Ixo {
 
     public static String separator = "____________________________________________________";
 
+    public static void menu() {
+        System.out.println("1. Echo");
+        System.out.println("2. Add");
+        System.out.println("3. Tasking");
+    }
+
     public static void echo() {
         System.out.println("I'll now repeat after you! Type 'bye' by itself to make me stop.");
 
@@ -18,7 +24,6 @@ public class Ixo {
             line = echoScan.nextLine().split(" ");
 
             if (line[0].equals("bye")) {
-                System.out.println("Okay, goodbye!");
                 return;
             }
 
@@ -30,6 +35,7 @@ public class Ixo {
                 space = (word.equals(line[line.length - 1])) ? "" : " ";
                 System.out.print(space);
             }
+            System.out.println();
             System.out.println(separator);
         }
 
@@ -93,6 +99,7 @@ public class Ixo {
 
         Task[] store = new Task[50]; //limit list to store only 50 items
         int storeIndex = 0;
+        int storeIndexCheck;
         String newline;
 
         String space; //variable to determine if spacing is needed for purposes of echoing
@@ -121,18 +128,30 @@ public class Ixo {
                 continue;
 
             case "mark":
-                System.out.println("Well done! I've marked this task as done");
-                Task itemToMark = store[Integer.parseInt(line[1])-1];
-                itemToMark.isDone = true;
-                System.out.println("[" + itemToMark.getStatusIcon() + "] " + itemToMark.description);
+                storeIndexCheck = Integer.parseInt(line[1])-1;
+                Task itemToMark = store[storeIndexCheck];
+                if (itemToMark.isDone) {
+                    System.out.println("You have already done this task.");
+                }
+                else {
+                    System.out.println("Well done! I've marked this task as done");
+                    itemToMark.isDone = true;
+                    System.out.println("[" + itemToMark.getStatusIcon() + "] " + itemToMark.description);
+                }
                 System.out.println(separator);
                 continue;
 
             case "unmark":
-                System.out.println("Okay, I'll mark this task as not done");
-                Task itemToUnmark = store[Integer.parseInt(line[1])-1];
-                itemToUnmark.isDone = false;
-                System.out.println("[" + itemToUnmark.getStatusIcon() + "] " + itemToUnmark.description);
+                storeIndexCheck = Integer.parseInt(line[1])-1;
+                Task itemToUnmark = store[storeIndexCheck];
+                if (!itemToUnmark.isDone) {
+                    System.out.println("This task was not done yet.");
+                }
+                else {
+                    System.out.println("Okay, I'll mark this task as not done");
+                    itemToUnmark.isDone = false;
+                    System.out.println("[" + itemToUnmark.getStatusIcon() + "] " + itemToUnmark.description);
+                }
                 System.out.println(separator);
                 continue;
             }
@@ -180,7 +199,8 @@ public class Ixo {
             }
             cmdScan = new Scanner(System.in);
             System.out.println("Any other tasks you wish me to do? Type 'no' to exit");
-            cmdScan.nextLine();
+            Ixo.menu();
+            cmd = cmdScan.nextLine();
         } while (!cmd.equalsIgnoreCase("no"));
     }
 
@@ -189,9 +209,7 @@ public class Ixo {
         System.out.println(separator);
         System.out.println("Hello! I'm Ixo!");
         System.out.println("What can I do for you?");
-        System.out.println("1. Echo");
-        System.out.println("2. Add");
-        System.out.println("3. Tasking");
+        Ixo.menu();
         System.out.println(separator);
 
         Ixo.command();
