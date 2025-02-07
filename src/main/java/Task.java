@@ -1,8 +1,8 @@
 public class Task {
 
     protected String description;
-
     protected boolean isDone;
+    protected char identity;
 
     public Task(String description) {
         this.description = description;
@@ -11,5 +11,9 @@ public class Task {
 
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
+    }
+
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + description;
     }
 }

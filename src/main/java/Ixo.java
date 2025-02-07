@@ -1,176 +1,95 @@
 import java.util.Scanner;
 
+
 public class Ixo {
 
-    public static String separator = "____________________________________________________";
+    public final static String SEPARATOR = "____________________________________________________";
 
     public static void menu() {
-        System.out.println("1. Echo");
-        System.out.println("2. Add");
-        System.out.println("3. Tasking");
+        System.out.println("1. Task List");
     }
 
-    public static void echo() {
-        System.out.println("I'll now repeat after you! Type 'bye' by itself to make me stop.");
+    public static void taskList() {
 
-        String[] line;
-        Scanner echoScan;
+        Scanner lineScan;
+        Task[] taskStore = new Task[100]; //limit list to store only 100 items
+        int storeIndex = 0;
+        int taskToMark;
+        String cmd;
+        String inputLine;
+        String[] content;
 
-        String space; //variable to determine if spacing is needed for purposes of echoing
 
-        while (true) {
-            echoScan = new Scanner(System.in);
-            System.out.print("You said: ");
-            line = echoScan.nextLine().split(" ");
-
-            if (line[0].equals("bye")) {
-                return;
-            }
-
-            System.out.println();
-
-            System.out.print("I say: ");
-            for (String word : line) {
-                System.out.print(word);
-                space = (word.equals(line[line.length - 1])) ? "" : " ";
-                System.out.print(space);
-            }
-            System.out.println();
-            System.out.println(separator);
-        }
-
-    }
-
-    public static void add() {
         System.out.println("I'll now take a note on what you typed. Type 'bye' by itself to make me stop.");
 
-        String[] line;
-        Scanner addScan;
-
-        String[] store = new String[50]; //limit list to store only 50 items
-        int storeIndex = 0;
-        String newline;
-
-        String space; //variable to determine if spacing is needed for purposes of echoing
-
         while (true) {
-            addScan = new Scanner(System.in);
-            System.out.print("You said: ");
-            newline = addScan.nextLine();
-            line = newline.split(" ");
+            System.out.println(SEPARATOR);
+            lineScan = new Scanner(System.in);
+            System.out.print("");
+            inputLine = lineScan.nextLine();
+            cmd = inputLine.split(" ")[0];
 
-            switch (line[0]) {
+            switch (cmd) {
             case "bye":
                 return;
-
-            case "list":
-                int i = 1;
-                for (String item : store) {
-                    if (item == null) {
-                        break;
-                    }
-                    System.out.println(i + ". " + item);
-                    i++;
-                }
-                continue;
-            }
-
-            System.out.println();
-
-            System.out.print("added: ");
-            for (String word : line) {
-                System.out.print(word);
-                space = (word.equals(line[line.length - 1])) ? "" : " ";
-                System.out.print(space);
-            }
-            store[storeIndex] = newline;
-            storeIndex++;
-            System.out.println();
-            System.out.println(separator);
-        }
-
-    }
-
-    public static void tasklist() {
-        System.out.println("I'll now take a note on what you typed. Type 'bye' by itself to make me stop.");
-
-        String[] line;
-        Scanner addScan;
-
-        Task[] store = new Task[50]; //limit list to store only 50 items
-        int storeIndex = 0;
-        int storeIndexCheck;
-        String newline;
-
-        String space; //variable to determine if spacing is needed for purposes of echoing
-
-        while (true) {
-            addScan = new Scanner(System.in);
-            System.out.print("You said: ");
-            newline = addScan.nextLine();
-            Task newTask = new Task(newline);
-            line = newline.split(" ");
-
-            switch (line[0]) {
-            case "bye":
-                return;
-
             case "list":
                 System.out.println("Here's your list of tasks: ");
                 int i = 1;
-                for (Task item : store) {
+                for (Task item : taskStore) {
                     if (item == null) {
                         break;
                     }
-                    System.out.println(i + ". [" + item.getStatusIcon() + "] " + item.description);
+                    System.out.println(i + ": " + item);
                     i++;
                 }
-                continue;
+                break;
 
             case "mark":
-                storeIndexCheck = Integer.parseInt(line[1])-1;
-                Task itemToMark = store[storeIndexCheck];
-                if (itemToMark.isDone) {
-                    System.out.println("You have already done this task.");
-                }
-                else {
-                    System.out.println("Well done! I've marked this task as done");
-                    itemToMark.isDone = true;
-                    System.out.println("[" + itemToMark.getStatusIcon() + "] " + itemToMark.description);
-                }
-                System.out.println(separator);
-                continue;
-
             case "unmark":
-                storeIndexCheck = Integer.parseInt(line[1])-1;
-                Task itemToUnmark = store[storeIndexCheck];
-                if (!itemToUnmark.isDone) {
-                    System.out.println("This task was not done yet.");
+                taskToMark = Integer.parseInt(inputLine.split(" ")[1]) - 1; //-1 to match up user view to actual index access
+                if (taskToMark >= storeIndex || taskToMark < 0) {
+                    System.out.println("that task does not exist");
+                    System.out.println(SEPARATOR);
                 }
-                else {
-                    System.out.println("Okay, I'll mark this task as not done");
-                    itemToUnmark.isDone = false;
-                    System.out.println("[" + itemToUnmark.getStatusIcon() + "] " + itemToUnmark.description);
+                boolean isMark = cmd.equals("mark");
+                if (isMark) {
+                    System.out.println("Well done! task " + taskStore[taskToMark] + " has been marked.");
+                } else {
+                    System.out.println("The task " + taskStore[taskToMark] + " has been unmarked.");
                 }
-                System.out.println(separator);
-                continue;
-            }
+                taskStore[taskToMark].isDone = isMark;
+                break;
 
-            System.out.println();
+            case "todo":
+                taskStore[storeIndex] = new Todo(inputLine.split("todo ")[1]);
+                storeIndex++;
+                System.out.println("Todo added, you have " + storeIndex + " task(s) on the list");
+                break;
 
-            System.out.print("added: ");
-            for (String word : line) {
-                System.out.print(word);
-                space = (word.equals(line[line.length - 1])) ? "" : " ";
-                System.out.print(space);
+            case "deadline":
+                content = inputLine.split("deadline ")[1].split("/by");
+                taskStore[storeIndex] = new Deadline(content);
+                storeIndex++;
+                System.out.println("Deadline added, you have " + storeIndex + " task(s) on the list");
+                break;
+
+            case "event":
+                content = inputLine.split("event ")[1].split("/from");
+                String description = content[0];
+                String duration = content[1];
+                taskStore[storeIndex] = new Event(description, duration);
+                storeIndex++;
+                System.out.println("Event added, you have " + storeIndex + " task(s) on the list");
+                break;
+
+            default:
+                lineScan.nextLine();
+                System.out.println("Unknown command. Type 'bye' to exit");
+                break;
             }
-            store[storeIndex] = newTask;
-            storeIndex++;
-            System.out.println();
-            System.out.println(separator);
         }
-
     }
+
 
     public static void command() {
         String cmd;
@@ -178,23 +97,14 @@ public class Ixo {
         cmd = cmdScan.nextLine();
         do {
             switch (cmd.toLowerCase()) {
-            case "echo":
+            case "task list":
             case "1":
-                echo();
-                break;
-
-            case "add":
-            case "2":
-                add();
-                break;
-
-            case "tasking":
-            case "3":
-                tasklist();
+                taskList();
                 break;
 
             default:
                 System.out.println("Invalid command. Type 'bye' by itself to make me stop.");
+                cmd = cmdScan.nextLine();
                 continue;
             }
             cmdScan = new Scanner(System.in);
@@ -206,16 +116,16 @@ public class Ixo {
 
     public static void main(String[] args) {
 
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
         System.out.println("Hello! I'm Ixo!");
         System.out.println("What can I do for you?");
         Ixo.menu();
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
 
         Ixo.command();
 
         System.out.println("Bye. Hope to see you again soon!");
-        System.out.println(separator);
+        System.out.println(SEPARATOR);
 
     }
 }
