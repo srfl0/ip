@@ -29,7 +29,7 @@ public class Ixo {
             inputLine = lineScan.nextLine();
             cmd = inputLine.split(" ")[0];
 
-            switch (cmd) {
+            switch (cmd.toLowerCase()) {
             case "bye":
                 return;
             case "list":
