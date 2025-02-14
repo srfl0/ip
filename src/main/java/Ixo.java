@@ -46,40 +46,60 @@ public class Ixo {
 
             case "mark":
             case "unmark":
-                taskToMark = Integer.parseInt(inputLine.split(" ")[1]) - 1; //-1 to match up user view to actual index access
-                if (taskToMark >= storeIndex || taskToMark < 0) {
-                    System.out.println("that task does not exist");
-                    System.out.println(SEPARATOR);
+                try {
+                    taskToMark = Integer.parseInt(inputLine.split(" ")[1]) - 1; //-1 to match up user view to actual index access
+                    if (taskToMark >= storeIndex || taskToMark < 0) {
+                        System.out.println("that task does not exist");
+                        System.out.println(SEPARATOR);
+                    }
+                    boolean isMark = cmd.equals("mark");
+                    if (isMark) {
+                        System.out.println("Well done! task " + taskStore[taskToMark] + " has been marked.");
+                    } else {
+                        System.out.println("The task " + taskStore[taskToMark] + " has been unmarked.");
+                    }
+                    taskStore[taskToMark].isDone = isMark;
+                } catch (NumberFormatException e) {
+                    System.out.println("You did not enter a number");
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("You did not enter a valid corresponding number");
                 }
-                boolean isMark = cmd.equals("mark");
-                if (isMark) {
-                    System.out.println("Well done! task " + taskStore[taskToMark] + " has been marked.");
-                } else {
-                    System.out.println("The task " + taskStore[taskToMark] + " has been unmarked.");
-                }
-                taskStore[taskToMark].isDone = isMark;
                 break;
 
             case "todo":
-                taskStore[storeIndex] = new Todo(inputLine.split("todo ")[1]);
-                storeIndex++;
-                System.out.println("Todo added, you have " + storeIndex + " task(s) on the list");
+                try {
+                    taskStore[storeIndex] = new Todo(inputLine.split("todo ")[1]);
+                    storeIndex++;
+                    System.out.println("Todo added, you have " + storeIndex + " task(s) on the list");
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("You can't add an empty Todo");
+                }
+
+
                 break;
 
             case "deadline":
-                content = inputLine.split("deadline ")[1].split("/by");
-                taskStore[storeIndex] = new Deadline(content);
-                storeIndex++;
-                System.out.println("Deadline added, you have " + storeIndex + " task(s) on the list");
+                try {
+                    content = inputLine.split("deadline ")[1].split("/by");
+                    taskStore[storeIndex] = new Deadline(content);
+                    storeIndex++;
+                    System.out.println("Deadline added, you have " + storeIndex + " task(s) on the list");
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("You can't add an empty Deadline");
+                }
                 break;
 
             case "event":
-                content = inputLine.split("event ")[1].split("/from");
-                String description = content[0];
-                String duration = content[1];
-                taskStore[storeIndex] = new Event(description, duration);
-                storeIndex++;
-                System.out.println("Event added, you have " + storeIndex + " task(s) on the list");
+                try {
+                    content = inputLine.split("event ")[1].split("/from");
+                    String description = content[0];
+                    String duration = content[1];
+                    taskStore[storeIndex] = new Event(description, duration);
+                    storeIndex++;
+                    System.out.println("Event added, you have " + storeIndex + " task(s) on the list");
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("You can't add an empty Event");
+                }
                 break;
 
             default:
