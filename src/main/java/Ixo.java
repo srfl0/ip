@@ -59,9 +59,9 @@ public class Ixo {
                         System.out.println("The task " + taskStore[taskToMark] + " has been unmarked.");
                     }
                     taskStore[taskToMark].isDone = isMark;
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException e) { //for non-number input
                     System.out.println("You did not enter a number");
-                } catch (ArrayIndexOutOfBoundsException e) {
+                } catch (ArrayIndexOutOfBoundsException e) { //for out of bounds index entered
                     System.out.println("You did not enter a valid corresponding number");
                 }
                 break;
@@ -84,7 +84,7 @@ public class Ixo {
                     taskStore[storeIndex] = new Deadline(content);
                     storeIndex++;
                     System.out.println("Deadline added, you have " + storeIndex + " task(s) on the list");
-                } catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e) { //for out of bounds index entered
                     System.out.println("You can't add an empty Deadline");
                 }
                 break;
@@ -97,7 +97,7 @@ public class Ixo {
                     taskStore[storeIndex] = new Event(description, duration);
                     storeIndex++;
                     System.out.println("Event added, you have " + storeIndex + " task(s) on the list");
-                } catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e) { //for out of bounds index entered
                     System.out.println("You can't add an empty Event");
                 }
                 break;
