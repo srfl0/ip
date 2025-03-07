@@ -3,10 +3,10 @@ public class Event extends Task{
     protected String from;
     protected String to;
 
-    public Event(String description, String duration) {
+    public Event(String description, String from, String to) {
         super(description);
-        this.from = duration.split("/to")[0];
-        this.to = duration.split("/to")[1];
+        this.from = from.split("from")[1].trim();
+        this.to = to.split("to")[1].trim();
         identity = 'E';
     }
 

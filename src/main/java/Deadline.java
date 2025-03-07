@@ -2,10 +2,10 @@ public class Deadline extends Task {
 
     protected String by;
 
-    public Deadline(String[] content){
-        super(content[0]);
+    public Deadline(String description, String by) {
+        super(description);
         identity = 'D';
-        this.by = content[1];
+        this.by = by.split("by")[1].trim();
     }
 
     public String toString(){
