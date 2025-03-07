@@ -1,6 +1,6 @@
-public class Todo extends Task {
+public class ToDo extends Task {
 
-    public Todo(String content) {
+    public ToDo(String content) {
         super(content);
         identity = 'T';
     }
