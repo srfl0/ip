@@ -1,12 +1,5 @@
-public class ToDo extends Task {
-
-    public ToDo(String content) {
-        super(content);
-        identity = 'T';
+public final class ToDo extends Task {
+    public ToDo(String description) {
+        super("T", description); // ✅ Identity handled in superclass
     }
-
-    public String toString() {
-        return "[" + identity + "]" + super.toString();
-    }
-
 }

@@ -1,7 +1,9 @@
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
-
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Ixo {
 
@@ -9,7 +11,8 @@ public class Ixo {
     public final static int TASK_CONTENT_COUNT = 2;
     public final static int EXPECTED_DEADLINE_TASK_CONTENT_COUNT = 2;
     public final static int EXPECTED_EVENT_TASK_CONTENT_COUNT = 3;
-
+    public final static String filePath = "data/tasks.txt";
+    public static Scanner inpScan = new Scanner(System.in);
 
     public static void menu(String menuType) {
         switch (menuType) {
@@ -34,11 +37,59 @@ public class Ixo {
 
     }
 
+    public static void taskListInit(File f, ArrayList<Task> tasks) {
+        try {
+            Scanner fileScan = new Scanner(f);
+            String lineReader;
+            String[] stringProcessor;
+            while (fileScan.hasNextLine()) {
+                lineReader = fileScan.nextLine();
+                System.out.println(lineReader);
+                stringProcessor = lineReader.split(" \\| ");
+                try {
+                    switch (stringProcessor[0]) {
+                    case "T":
+                        tasks.add(new ToDo(stringProcessor[2]));
+                        break;
+                    case "D":
+                        tasks.add(new Deadline(stringProcessor[2], stringProcessor[3]));
+                        break;
+                    case "E":
+                        tasks.add(new Event(stringProcessor[2], stringProcessor[3], stringProcessor[4]));
+                        break;
+                    default:
+                        tasks.add(null);
+                        break;
+                    }
+                    tasks.getLast().isDone = (stringProcessor[1].equals("X"));
+                }
+                catch (NullPointerException _) {
+                }
+            }
+            fileScan.close();
+        }
+        catch (IOException _){
+        }
+    }
+
     public static void taskList() {
 
         Scanner lineScan;
+        File f = new File(filePath);
+        File parentDir = f.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs(); // Creates all missing parent directories
+        }
+        try {
+            f.createNewFile();
+        }
+        catch (IOException _){
+
+        }
         ArrayList<Task> taskStore = new ArrayList<>();
-        taskStore.add(null); //dummy task to pad index to 1-based
+        taskStore.add(null); // dummy task to pad index
+        taskListInit(f,taskStore);
+
         String cmd;
         String[] inputLine;
         String[] content;
@@ -47,7 +98,7 @@ public class Ixo {
 
         while (true) {
             System.out.println(SEPARATOR);
-            lineScan = new Scanner(System.in);
+            lineScan = inpScan;
             System.out.print("");
             inputLine = lineScan.nextLine().split(" ", TASK_CONTENT_COUNT);
             cmd = inputLine[0].toLowerCase();
@@ -196,6 +247,16 @@ public class Ixo {
 
             case "bye":
             case "8":
+                String taskList = getWriteString(taskStore);
+
+                try {
+                    FileWriter fw = new FileWriter(f);
+                    fw.write(taskList);
+                    fw.close();
+                }
+                catch (IOException e) {
+                    System.out.println("Something went wrong");
+                }
                 return;
 
             case "test":
@@ -209,39 +270,87 @@ public class Ixo {
         }
     }
 
+    private static String getWriteString(ArrayList<Task> taskStore) {
+        StringBuilder taskList = new StringBuilder();
+        for (Task task : taskStore) {
+            try {
+                switch (task) {
+                case ToDo t:
+                    taskList.append(t.identity)
+                            .append(" | ")
+                            .append(t.getStatusIcon())
+                            .append(" | ")
+                            .append(t.description);
+                    break;
+
+                case Deadline d:
+                    taskList.append(d.identity)
+                            .append(" | ")
+                            .append(d.getStatusIcon())
+                            .append(" | ")
+                            .append(d.description)
+                            .append(" | ")
+                            .append(d.getBy());
+                    break;
+
+                case Event e:
+                    taskList.append(e.identity)
+                            .append(" | ")
+                            .append(e.getStatusIcon())
+                            .append(" | ")
+                            .append(e.description)
+                            .append(" | ")
+                            .append(e.getFrom())
+                            .append(" | ")
+                            .append(e.getTo());
+                    break;
+
+                default:
+                    break;
+                }
+            }
+            catch (NullPointerException e) {
+                System.out.println("Starting save...");
+                continue;
+            }
+            taskList.append("\n");
+        }
+        return taskList.toString();
+    }
+
     private static void addTaskText(ArrayList<Task> taskStore, String taskType) {
         System.out.println("Okay, I have added this " + taskType + ":");
         System.out.println("\t" + taskStore.getLast());
         int storeSize = taskStore.size() - 1; //correctly reflect number of tasks in the list after adding dummy task
-        System.out.println("Now you have " + storeSize + " tasks in the list."); //
+        System.out.println("Now you have " + storeSize + " task" + ((storeSize == 1) ? " " : "s ") + "in the list."); //
     }
 
-
     public static void command() {
-        String cmd;
         Scanner cmdScan = new Scanner(System.in);
-        cmd = cmdScan.nextLine();
-        do {
-            switch (cmd.toLowerCase()) {
+
+        while (true) {
+
+            Ixo.menu("apps");
+
+            String cmd = cmdScan.nextLine().toLowerCase();
+
+            switch (cmd) {
             case "list":
             case "1":
                 taskList();
+                System.out.println("Any other tasks you wish me to do? Type 'no' to exit");
                 break;
 
             case "bye":
             case "2":
-                return;
+            case "no":
+                return; // Exit the method immediately
 
             default:
                 System.out.println("Invalid command. Type 'bye' by itself to make me stop.");
-                cmd = cmdScan.nextLine();
-                continue;
+                break;
             }
-            cmdScan = new Scanner(System.in);
-            System.out.println("Any other tasks you wish me to do? Type 'no' to exit");
-            Ixo.menu("apps");
-            cmd = cmdScan.nextLine();
-        } while (!cmd.equalsIgnoreCase("no"));
+        }
     }
 
     public static void main(String[] args) {
@@ -249,7 +358,6 @@ public class Ixo {
         System.out.println(SEPARATOR);
         System.out.println("Hello! I'm Ixo!");
         System.out.println("What can I do for you?");
-        Ixo.menu("apps");
         System.out.println(SEPARATOR);
 
         Ixo.command();

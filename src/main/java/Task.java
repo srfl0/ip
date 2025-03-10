@@ -1,10 +1,11 @@
-public class Task {
-
+public sealed class Task permits Event, Deadline, ToDo {
     protected String description;
     protected boolean isDone;
-    protected char identity;
+    protected String identity;
 
-    public Task(String description) {
+    // ✅ Accept identity in the constructor
+    public Task(String identity, String description) {
+        this.identity = identity;
         this.description = description;
         this.isDone = false;
     }
@@ -13,7 +14,8 @@ public class Task {
         return (isDone ? "X" : " ");
     }
 
+    @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        return "[" + identity + "] [" + getStatusIcon() + "] " + description;
     }
 }

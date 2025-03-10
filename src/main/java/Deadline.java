@@ -1,15 +1,17 @@
-public class Deadline extends Task {
+public final class Deadline extends Task {
+    private final String by;
 
-    protected String by;
-
-    public Deadline(String description, String by) {
-        super(description);
-        identity = 'D';
-        this.by = by.split("by")[1].trim();
+    public Deadline(String description, String dueDate) {
+        super("D", description);
+        this.by = dueDate.contains("by") ? dueDate.split("by")[1].trim() : dueDate;
     }
 
-    public String toString(){
-        return "[" + identity + "]" + super.toString() + " (by:" + by + ")";
+    @Override
+    public String toString() {
+        return super.toString() + " (by: " + by + ")";
+    }
+
+    public String getBy() {
+        return by;
     }
 }
-

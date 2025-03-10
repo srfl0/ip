@@ -1,17 +1,26 @@
-public class Event extends Task{
+public final class Event extends Task {
 
-    protected String from;
-    protected String to;
+    private final String from;
+    private final String to;
 
     public Event(String description, String from, String to) {
-        super(description);
-        this.from = from.split("from")[1].trim();
-        this.to = to.split("to")[1].trim();
-        identity = 'E';
+        super("E", description); // ✅ Pass identity to Task
+
+        // ✅ Parse "from" and "to" inside Task or here in Event
+        this.from = from.contains("from") ? from.split("from")[1].trim() : from;
+        this.to = to.contains("to") ? to.split("to")[1].trim() : to;
     }
 
-    public String toString(){
-        return "[" + identity + "]" + super.toString() + " (from:" + from + " to:" + to + ")";
+    @Override
+    public String toString() {
+        return super.toString() + " (from: " + from + " to: " + to + ")";
     }
 
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTo() {
+        return to;
+    }
 }
