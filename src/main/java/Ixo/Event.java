@@ -4,9 +4,7 @@ public final class Event extends Task {
     private final String to;
 
     public Event(String description, String from, String to) {
-        super("E", description); // ✅ Pass identity to Task
-
-        // ✅ Parse "from" and "to" inside Task or here in Event
+        super("E", description);
         this.from = from.contains("from") ? from.split("from")[1].trim() : from;
         this.to = to.contains("to") ? to.split("to")[1].trim() : to;
     }

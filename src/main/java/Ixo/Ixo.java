@@ -14,7 +14,7 @@ public class Ixo {
     public final static String filePath = "data/tasks.txt";
     public static Scanner inpScan = new Scanner(System.in);
 
-    public static void menu(String menuType) {
+    public static void showMenu(String menuType) {
         switch (menuType) {
         case "apps":
             System.out.println("1. Task List");
@@ -94,7 +94,7 @@ public class Ixo {
         String[] inputLine;
         String[] content;
 
-        Ixo.menu("list");
+        Ixo.showMenu("list");
 
         while (true) {
             System.out.println(SEPARATOR);
@@ -219,7 +219,7 @@ public class Ixo {
                     }
                     Task taskToMark = taskStore.get(markIndex);
 
-                    if (cmd.equals("mark") == taskToMark.isDone) { //if newStatus does not match up with the correct type of command, throw exception
+                    if (cmd.equals("mark") == taskToMark.isDone) { //if
                         throw new MarkTaskException(cmd);
                     }
 
@@ -325,12 +325,12 @@ public class Ixo {
         System.out.println("Now you have " + storeSize + " task" + ((storeSize == 1) ? " " : "s ") + "in the list."); //
     }
 
-    public static void command() {
+    public static void parseCommand() {
         Scanner cmdScan = new Scanner(System.in);
 
         while (true) {
 
-            Ixo.menu("apps");
+            Ixo.showMenu("apps");
 
             String cmd = cmdScan.nextLine().toLowerCase();
 
@@ -347,7 +347,7 @@ public class Ixo {
                 return; // Exit the method immediately
 
             default:
-                System.out.println("Invalid command. Type 'bye' by itself to make me stop.");
+                System.out.println("Invalid parseCommand. Type 'bye' by itself to make me stop.");
                 break;
             }
         }
@@ -360,7 +360,7 @@ public class Ixo {
         System.out.println("What can I do for you?");
         System.out.println(SEPARATOR);
 
-        Ixo.command();
+        Ixo.parseCommand();
 
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(SEPARATOR);
