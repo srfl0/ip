@@ -1,10 +1,11 @@
 package Ixo.Parser;
 
-import Ixo.Exceptions.DeleteTaskException;
-import Ixo.Exceptions.MarkTaskException;
-import Ixo.Exceptions.NonMatchingParametersException;
-import Ixo.Tasks.*;
-import Ixo.Ui.*;
+import Ixo.Exceptions.*;
+import Ixo.Tasks.Task;
+import Ixo.Tasks.Deadline;
+import Ixo.Tasks.Event;
+import Ixo.Tasks.ToDo;
+import Ixo.Ui.FlatString;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -178,8 +179,45 @@ public class Ui implements FlatString {
 
                 break;
 
-            case "bye":
+            case "find":
             case "8":
+                try {
+                    if (taskStore.isEmpty()) {
+                        throw new ArrayIndexOutOfBoundsException();
+                    }
+
+                    String find = inputLine[1];
+
+                    ArrayList<Task> foundList = new ArrayList<>();
+
+                    for (Task task : taskStore) {
+                        if (task != null && task.getDescription().contains(find)) {
+                            foundList.add(task);
+                        }
+                    }
+
+                    if (foundList.isEmpty()) {
+                        throw new FindException();
+                    }
+
+                    int counter = 1;
+
+                    System.out.println("These are the tasks matching your search key");
+
+                    for (Task task : foundList) {
+                        System.out.println(counter++ + "." + task);
+                    }
+                }catch(FindException e) {
+                    System.out.println("There are no tasks matching your search key");
+                }catch(ArrayIndexOutOfBoundsException e) {
+                    System.out.println("There are no tasks to find");
+                }
+
+                break;
+
+
+            case "bye":
+            case "9":
                 String taskList = getWriteString(taskStore);
 
                 try {
