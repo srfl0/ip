@@ -5,7 +5,6 @@ public sealed class Task permits Event, Deadline, ToDo {
     protected boolean isDone;
     protected String identity;
 
-    // ✅ Accept identity in the constructor
     public Task(String identity, String description) {
         this.identity = identity;
         this.description = description;
@@ -38,6 +37,11 @@ public sealed class Task permits Event, Deadline, ToDo {
 
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
+    }
+
+    public boolean isCorrectParameters(String content, String toCheck) {
+        String[] lengthCheck = content.split(toCheck);
+        return lengthCheck.length == 2; //
     }
 
     @Override

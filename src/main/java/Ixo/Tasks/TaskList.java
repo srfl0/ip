@@ -9,6 +9,7 @@ public class TaskList {
         if (tasks == null){
             throw new NullPointerException();
         }
+        tasks.addFirst(null); //dummy task addition
         this.tasks = tasks;
 
     }
