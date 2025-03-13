@@ -1,3 +1,9 @@
+package Ixo.Ui;
+
+import Ixo.Tasks.*;
+import Ixo.Exceptions.*;
+import Ixo.Parser.*;
+import Ixo.Storage.*;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -5,37 +11,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Ixo {
+public class Ixo implements FlatString{
 
-    public final static String SEPARATOR = "____________________________________________________";
-    public final static int TASK_CONTENT_COUNT = 2;
-    public final static int EXPECTED_DEADLINE_TASK_CONTENT_COUNT = 2;
-    public final static int EXPECTED_EVENT_TASK_CONTENT_COUNT = 3;
+
     public final static String filePath = "data/tasks.txt";
     public static Scanner inpScan = new Scanner(System.in);
-
-    public static void showMenu(String menuType) {
-        switch (menuType) {
-        case "apps":
-            System.out.println("1. Task List");
-            System.out.println("2. Exit (bye)");
-            break;
-
-        case "list":
-            System.out.println("Sure! These are the commands you can run, and the associated commands to enter");
-            System.out.println(SEPARATOR + "\n");
-            System.out.println("1. View list of Tasks (list)");
-            System.out.println("2. Add To-Do (todo)");
-            System.out.println("3. Add Deadline (deadline)");
-            System.out.println("4. Add Event (event)");
-            System.out.println("5. Delete Task (task)");
-            System.out.println("6. Mark task (mark)");
-            System.out.println("7. Unmark task (unmark)");
-            System.out.println("8. Exit (bye)");
-            break;
-        }
-
-    }
 
     public static void taskListInit(File f, ArrayList<Task> tasks) {
         try {
@@ -61,7 +41,7 @@ public class Ixo {
                         tasks.add(null);
                         break;
                     }
-                    tasks.getLast().isDone = (stringProcessor[1].equals("X"));
+                    tasks.getLast().setDone((stringProcessor[1].equals("X")));
                 }
                 catch (NullPointerException _) {
                 }
@@ -94,7 +74,7 @@ public class Ixo {
         String[] inputLine;
         String[] content;
 
-        Ixo.showMenu("list");
+        ShowMenu menu = new ShowMenu("list");
 
         while (true) {
             System.out.println(SEPARATOR);
@@ -125,7 +105,7 @@ public class Ixo {
             case "2":
                 try {
                     ToDo newToDo = new ToDo(inputLine[1].trim());
-                    if (newToDo.description.isEmpty()){
+                    if (newToDo.getDescription().isEmpty()){
                         throw new ArrayIndexOutOfBoundsException();
                     }
                     taskStore.add(newToDo);
@@ -219,17 +199,17 @@ public class Ixo {
                     }
                     Task taskToMark = taskStore.get(markIndex);
 
-                    if (cmd.equals("mark") == taskToMark.isDone) { //if
+                    if (cmd.equals("mark") == taskToMark.isDone()) { //if
                         throw new MarkTaskException(cmd);
                     }
 
-                    taskToMark.isDone = !taskToMark.isDone;
+                    taskToMark.setDone(!taskToMark.isDone());
 
-                    if (taskToMark.isDone) {
-                        System.out.println("Well done! task " + taskToMark.description + " has been marked as done.");
+                    if (taskToMark.isDone()) {
+                        System.out.println("Well done! task " + taskToMark.getDescription() + " has been marked as done.");
                     }
                     else {
-                        System.out.println("The task " + taskToMark.description + " has been unmarked.");
+                        System.out.println("The task " + taskToMark.getDescription() + " has been unmarked.");
                     }
 
                 }
@@ -276,29 +256,29 @@ public class Ixo {
             try {
                 switch (task) {
                 case ToDo t:
-                    taskList.append(t.identity)
+                    taskList.append(t.getIdentity())
                             .append(" | ")
                             .append(t.getStatusIcon())
                             .append(" | ")
-                            .append(t.description);
+                            .append(t.getDescription());
                     break;
 
                 case Deadline d:
-                    taskList.append(d.identity)
+                    taskList.append(d.getIdentity())
                             .append(" | ")
                             .append(d.getStatusIcon())
                             .append(" | ")
-                            .append(d.description)
+                            .append(d.getDescription())
                             .append(" | ")
                             .append(d.getBy());
                     break;
 
                 case Event e:
-                    taskList.append(e.identity)
+                    taskList.append(e.getIdentity())
                             .append(" | ")
                             .append(e.getStatusIcon())
                             .append(" | ")
-                            .append(e.description)
+                            .append(e.getDescription())
                             .append(" | ")
                             .append(e.getFrom())
                             .append(" | ")
@@ -330,7 +310,7 @@ public class Ixo {
 
         while (true) {
 
-            Ixo.showMenu("apps");
+            ShowMenu menu = new ShowMenu("apps");
 
             String cmd = cmdScan.nextLine().toLowerCase();
 

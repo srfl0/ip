@@ -1,6 +1,8 @@
+package Ixo.Exceptions;
+
 public class MarkTaskException extends RuntimeException {
 
-    String errorMessage;
+    public String errorMessage;
 
     public MarkTaskException(String marked) {
         this.errorMessage = (marked.equals("mark")) ? "This task had already been marked" : "This task was not marked";

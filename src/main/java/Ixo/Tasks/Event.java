@@ -1,3 +1,5 @@
+package Ixo.Tasks;
+
 public final class Event extends Task {
 
     private final String from;

@@ -1,6 +1,8 @@
+package Ixo.Exceptions;
+
 public class DeleteTaskException extends RuntimeException {
 
-    String errorMessage;
+    public String errorMessage;
 
     public DeleteTaskException() {
     }
