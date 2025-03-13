@@ -3,7 +3,7 @@ package Ixo.Tasks;
 import java.util.ArrayList;
 
 public class TaskList {
-    ArrayList<Task> tasks = new ArrayList<Task>();
+    ArrayList<Task> tasks = new ArrayList<>();
 
     public TaskList(ArrayList<Task> tasks){
         if (tasks == null){
