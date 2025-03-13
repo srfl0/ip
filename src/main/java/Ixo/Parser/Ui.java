@@ -287,7 +287,7 @@ public class Ui implements FlatString {
         return taskList.toString();
     }
 
-    public void run() {
+    public void begin() {
         System.out.println(FlatString.SEPARATOR);
         System.out.println("Hello! I'm Ixo!");
         System.out.println("What can I do for you?");
