@@ -368,7 +368,7 @@ public class Ui implements FlatString {
     public void begin() {
         System.out.println(FlatString.SEPARATOR);
         System.out.println("Hello! I'm Ixo!");
-        System.out.println("ooooooooooooooooo");
+        System.out.println("\nooooooooooooooooo");
         for (int rowsTop = 1; rowsTop < 4; rowsTop++){
             for (int spacesFront = 0; spacesFront < rowsTop; spacesFront++) {
                 System.out.print("  ");
@@ -402,7 +402,7 @@ public class Ui implements FlatString {
             }
             System.out.println();
         }
-        System.out.println("ooooooooooooooooo");
+        System.out.println("ooooooooooooooooo\n");
 
 
         System.out.println("What can I do for you?");
