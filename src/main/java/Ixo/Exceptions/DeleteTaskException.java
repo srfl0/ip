@@ -1,5 +1,9 @@
 package Ixo.Exceptions;
 
+/**
+ * Exception exclusively for delete task feature
+ */
+
 public class DeleteTaskException extends RuntimeException {
 
     public String errorMessage;

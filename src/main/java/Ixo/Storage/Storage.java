@@ -10,6 +10,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles initialization of array list from
+ * text file
+ * @param filePath file path of text file
+ */
+
 public record Storage(String filePath) {
 
     public ArrayList<Task> load() {

@@ -2,6 +2,11 @@ package Ixo.Ui;
 
 import java.util.Scanner;
 
+/**
+ * Contains all fixed values to be used throughout chatbot
+ * application
+ */
+
 public interface FlatString {
     String SEPARATOR = "____________________________________________________";
     int TASK_CONTENT_COUNT = 2;

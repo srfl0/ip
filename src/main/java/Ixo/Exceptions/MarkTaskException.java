@@ -1,5 +1,11 @@
 package Ixo.Exceptions;
 
+/**
+ * Exception exclusively for mark task feature
+ * Provides reactive response based on whether a redundant action
+ * is done (i.e. attempting mark an already marked task.
+ */
+
 public class MarkTaskException extends RuntimeException {
 
     public String errorMessage;

@@ -1,5 +1,10 @@
 package Ixo.Exceptions;
 
+/**
+ * Exception for task creation to prevent adding a task with
+ * incorrect number of parameters as provided by the user.
+ */
+
 public class NonMatchingParametersException extends RuntimeException {
 
     public String errorMessage;

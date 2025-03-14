@@ -4,6 +4,10 @@ import Ixo.Parser.Ui;
 import Ixo.Storage.Storage;
 import Ixo.Tasks.TaskList;
 
+/**
+ * Top-layer for Ixo chatbot program
+ */
+
 public class Ixo implements FlatString{
 
     Storage storage;

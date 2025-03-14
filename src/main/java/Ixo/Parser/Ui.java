@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * Main interface for responses to user actions
+ */
+
 public class Ui implements FlatString {
 
     protected ArrayList<Task> taskStore;
@@ -23,6 +27,10 @@ public class Ui implements FlatString {
         this.taskStore = tasks;
         this.filePath = filePath;
     }
+
+    /**
+     * Main method for chatbot task list program
+     */
 
     public void taskList() {
 
@@ -240,6 +248,10 @@ public class Ui implements FlatString {
         }
     }
 
+    /**
+     * Method for selecting program to run
+     */
+
     public void parseCommand() {
 
         Scanner cmdScan = new Scanner(System.in);
@@ -271,12 +283,25 @@ public class Ui implements FlatString {
         }
     }
 
+    /**
+     * Method for displaying message response when tasks are successfully added
+     * @param taskStore the full array list of tasks
+     * @param taskType the type of task being added
+     */
+
     public static void addTaskText(ArrayList<Task> taskStore, String taskType) {
         System.out.println("Okay, I have added this " + taskType + ":");
         System.out.println("\t" + taskStore.getLast());
         int storeSize = taskStore.size() - 1; //correctly reflect number of tasks in the list after adding dummy task
         System.out.println("Now you have " + storeSize + " task" + ((storeSize == 1) ? " " : "s ") + "in the list."); //
     }
+
+    /**
+     * Method for extracting contents of array list as
+     * a String type for storage in a text file
+     * @param taskStore the full array list of tasks
+     * @return full string for storage in file
+     */
 
     public static String getWriteString(ArrayList<Task> taskStore) {
         StringBuilder taskList = new StringBuilder();
@@ -325,9 +350,51 @@ public class Ui implements FlatString {
         return taskList.toString();
     }
 
+    /**
+     * Starter method to the chatbot, provides user with a
+     * field to input to select programs available to them
+     */
+
     public void begin() {
         System.out.println(FlatString.SEPARATOR);
         System.out.println("Hello! I'm Ixo!");
+        System.out.println("ooooooooooooooooo");
+        for (int rowsTop = 1; rowsTop < 4; rowsTop++){
+            for (int spacesFront = 0; spacesFront < rowsTop; spacesFront++) {
+                System.out.print("  ");
+            }
+            System.out.print("o");
+
+            for (int spacesMid = 0; spacesMid < (15 - (4*rowsTop)); spacesMid++) {
+                System.out.print(" ");
+            }
+
+            System.out.println("o");
+
+        }
+
+        System.out.println("        o        ");
+
+        for (int rowsBottom = 3; rowsBottom > 0; rowsBottom--){
+            for (int spacesFront = 0; spacesFront < rowsBottom; spacesFront++) {
+                System.out.print("  ");
+            }
+            System.out.print("o");
+
+            for (int spacesMid = 0; spacesMid < (15 - 4*(rowsBottom)) ; spacesMid++) {
+                System.out.print(" ");
+            }
+
+            System.out.print("o");
+
+            for (int spacesBack = 0; spacesBack < rowsBottom; spacesBack++) {
+                System.out.print("  ");
+            }
+            System.out.println();
+        }
+        System.out.println("ooooooooooooooooo");
+
+
         System.out.println("What can I do for you?");
 
         parseCommand();
@@ -335,6 +402,12 @@ public class Ui implements FlatString {
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(FlatString.SEPARATOR);
     }
+
+    /**
+     * Method to show user available programs and the
+     * commands available in said program
+     * @param menuType menu to be displayed based on the program
+     */
 
     public static void showMenu(String menuType) {
 
@@ -355,7 +428,8 @@ public class Ui implements FlatString {
             System.out.println("5. Delete Tasks (task)");
             System.out.println("6. Mark task (mark)");
             System.out.println("7. Unmark task (unmark)");
-            System.out.println("8. Exit (bye)");
+            System.out.println("8. Find task (find)");
+            System.out.println("9. Exit (bye)");
             break;
         }
     }

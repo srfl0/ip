@@ -1,5 +1,11 @@
 package Ixo.Tasks;
 
+/**
+ * Subclass of Task that contains the 'by' attribute,
+ * for date which the task should be completed by, and
+ * the relevant identity 'D'
+ */
+
 public final class Deadline extends Task {
     private final String by;
 

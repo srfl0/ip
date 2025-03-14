@@ -2,6 +2,12 @@ package Ixo.Tasks;
 
 import Ixo.Exceptions.NonMatchingParametersException;
 
+/**
+ * Subclass of Event that contains the 'from' and 'to' attributes,
+ * for start and end dates respectively, with relevant identifier
+ * 'E'
+ */
+
 public final class Event extends Task {
 
     private final String from;

@@ -1,5 +1,11 @@
 package Ixo.Tasks;
 
+/**
+ * Superclass for ToDo, Deadline and Event,
+ * provides a common access point for array
+ * list such that processing can be done
+ */
+
 public sealed class Task permits Event, Deadline, ToDo {
     protected String description;
     protected boolean isDone;
