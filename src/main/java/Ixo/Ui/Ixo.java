@@ -16,14 +16,7 @@ public class Ixo implements FlatString{
 
     public Ixo(String filePath){
         storage = new Storage(filePath);
-
-        try{
-            taskList = new TaskList(storage.load());
-        }
-        catch (NullPointerException e){
-            taskList = new TaskList();
-        }
-
+        taskList = new TaskList(storage.load());
         ui = new Ui(taskList.getTasks(),filePath);
     }
 

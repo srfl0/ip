@@ -38,16 +38,6 @@ public class Ui implements FlatString {
 
         Scanner lineScan;
         File f = new File(filePath);
-        File parentDir = f.getParentFile();
-        if (parentDir != null && !parentDir.exists()) {
-            parentDir.mkdirs(); // Creates all missing parent directories
-        }
-        try {
-            f.createNewFile();
-        } catch (IOException _) {
-
-        }
-
         String cmd;
         String[] inputLine;
         String[] content;
@@ -73,7 +63,8 @@ public class Ui implements FlatString {
                     for (Task item : taskStore.subList(1, taskStore.size())) { // excludes the dummy task while showing list
                         System.out.println(listIndex++ + ": " + item);
                     }
-                } catch (IndexOutOfBoundsException e) {
+                }
+                catch (IndexOutOfBoundsException e) {
                     System.out.println("Your task list is empty");
                 }
                 break;
@@ -298,7 +289,7 @@ public class Ui implements FlatString {
 
     public static void addTaskText(ArrayList<Task> taskStore, String taskType) {
         System.out.println("Okay, I have added this " + taskType + ":");
-        System.out.println("\t" + taskStore.getLast());
+        System.out.println("\t" + taskStore.get(taskStore.size()-1));
         int storeSize = taskStore.size() - 1; //correctly reflect number of tasks in the list after adding dummy task
         System.out.println("Now you have " + storeSize + " task" + ((storeSize == 1) ? " " : "s ") + "in the list."); //
     }
@@ -315,16 +306,17 @@ public class Ui implements FlatString {
         StringBuilder taskList = new StringBuilder();
         for (Task task : taskStore) {
             try {
-                switch (task) {
-                case ToDo t:
-                    taskList.append(t.getIdentity())
+                switch(task.getIdentity()){
+                case "T":
+                    taskList.append(task.getIdentity())
                             .append(" | ")
-                            .append(t.getStatusIcon())
+                            .append(task.getStatusIcon())
                             .append(" | ")
-                            .append(t.getDescription());
+                            .append(task.getDescription());
                     break;
 
-                case Deadline d:
+                case "D":
+                    Deadline d = (Deadline) task;
                     taskList.append(d.getIdentity())
                             .append(" | ")
                             .append(d.getStatusIcon())
@@ -334,7 +326,8 @@ public class Ui implements FlatString {
                             .append(d.getBy());
                     break;
 
-                case Event e:
+                case "E":
+                    Event e = (Event) task;
                     taskList.append(e.getIdentity())
                             .append(" | ")
                             .append(e.getStatusIcon())

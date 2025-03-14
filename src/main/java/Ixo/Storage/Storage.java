@@ -25,14 +25,18 @@ public record Storage(String filePath) {
 
     public ArrayList<Task> load() {
         File f = new File(this.filePath);
-        ArrayList<Task> tasks = new ArrayList<>();
-        if (f.exists()) {
-            return loadProcess(f, tasks);
+        File parentDir = f.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs(); // Creates all missing parent directories
         }
-        return null;
-
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+        ArrayList<Task> tasks = new ArrayList<>();
+        return loadProcess(f, tasks);
     }
-
 
     /**
      * Reads and processes a file to extract tasks and populate an ArrayList.
@@ -65,12 +69,15 @@ public record Storage(String filePath) {
                         tasks.add(null);
                         break;
                     }
-                    tasks.getLast().setDone((stringProcessor[1].equals("X")));
-                } catch (NullPointerException _) {
+                    tasks.get(tasks.size()-1).setDone((stringProcessor[1].equals("X")));
+                } catch (NullPointerException e) {
+                    fileScan.close();
+                    return null;
                 }
+                fileScan.close();
             }
-            fileScan.close();
-        } catch (IOException _) {
+        } catch (IOException e) {
+            e.getMessage();
         }
         return tasks;
     }
