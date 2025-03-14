@@ -3,8 +3,7 @@ package Ixo.Tasks;
 import java.util.ArrayList;
 
 /**
- * Handles creation of ArrayList for use in
- * task list program
+ * Handles creation of ArrayList for use in task list program
  */
 
 public class TaskList {

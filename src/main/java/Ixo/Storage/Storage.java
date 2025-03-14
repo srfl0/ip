@@ -11,12 +11,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Handles initialization of array list from
- * text file
- * @param filePath file path of text file
+ * Handles the loading of tasks from a text file and initializes the task list.
  */
 
 public record Storage(String filePath) {
+
+    /**
+     * Loads tasks from the specified file and returns an ArrayList of Task objects.
+     *
+     * @return An ArrayList of Task objects if the file exists; otherwise, returns null.
+     */
+
 
     public ArrayList<Task> load() {
         File f = new File(this.filePath);
@@ -28,9 +33,18 @@ public record Storage(String filePath) {
 
     }
 
-    public static ArrayList<Task> loadProcess(File f, ArrayList<Task> tasks) {
+
+    /**
+     * Reads and processes a file to extract tasks and populate an ArrayList.
+     *
+     * @param file  The file containing stored task data.
+     * @param tasks The list to store extracted tasks.
+     * @return The populated ArrayList of Task objects.
+     */
+
+    public static ArrayList<Task> loadProcess(File file, ArrayList<Task> tasks) {
         try {
-            Scanner fileScan = new Scanner(f);
+            Scanner fileScan = new Scanner(file);
             String lineReader;
             String[] stringProcessor;
             while (fileScan.hasNextLine()) {

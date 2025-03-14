@@ -5,7 +5,7 @@ import Ixo.Storage.Storage;
 import Ixo.Tasks.TaskList;
 
 /**
- * Top-layer for Ixo chatbot program
+ * Top-level for Ixo chatbot program
  */
 
 public class Ixo implements FlatString{

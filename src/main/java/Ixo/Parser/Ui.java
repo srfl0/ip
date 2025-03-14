@@ -15,7 +15,8 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * Main interface for responses to user actions
+ * The Ui class handles user interactions and manages the task list.
+ * It provides methods to parse user commands, display menus, and update tasks.
  */
 
 public class Ui implements FlatString {
@@ -29,7 +30,8 @@ public class Ui implements FlatString {
     }
 
     /**
-     * Main method for chatbot task list program
+     * Main method for handling the task list program.
+     * It continuously takes user input and processes commands.
      */
 
     public void taskList() {
@@ -197,24 +199,28 @@ public class Ui implements FlatString {
                     String find = inputLine[1];
 
                     ArrayList<Task> foundList = new ArrayList<>();
+                    ArrayList<java.lang.Integer> index = new ArrayList<>();
+
+                    int counter = 0;
 
                     for (Task task : taskStore) {
                         if (task != null && task.getDescription().contains(find)) {
+                            index.add(counter);
                             foundList.add(task);
                         }
+                        counter++;
                     }
 
                     if (foundList.isEmpty()) {
                         throw new FindException();
                     }
 
-                    int counter = 1;
-
                     System.out.println("These are the tasks matching your search key");
 
-                    for (Task task : foundList) {
-                        System.out.println(counter++ + "." + task);
+                    for(int i = 0; i < foundList.size(); i++) {
+                        System.out.println(index.get(i) + ": " + foundList.get(i).toString());
                     }
+
                 }catch(FindException e) {
                     System.out.println("There are no tasks matching your search key");
                 }catch(ArrayIndexOutOfBoundsException e) {
@@ -249,7 +255,7 @@ public class Ui implements FlatString {
     }
 
     /**
-     * Method for selecting program to run
+     * Parses user commands and directs to the appropriate program.
      */
 
     public void parseCommand() {
@@ -284,9 +290,10 @@ public class Ui implements FlatString {
     }
 
     /**
-     * Method for displaying message response when tasks are successfully added
-     * @param taskStore the full array list of tasks
-     * @param taskType the type of task being added
+     * Displays a message confirming that a task has been successfully added to the task list.
+     *
+     * @param taskStore The complete task list.
+     * @param taskType  The type of task being added (e.g., "todo", "deadline", "event").
      */
 
     public static void addTaskText(ArrayList<Task> taskStore, String taskType) {
@@ -297,10 +304,11 @@ public class Ui implements FlatString {
     }
 
     /**
-     * Method for extracting contents of array list as
-     * a String type for storage in a text file
-     * @param taskStore the full array list of tasks
-     * @return full string for storage in file
+     * Extracts the contents of the task list and formats them into a structured string for file storage.
+     *
+     * @param taskStore The complete task list.
+     * @return A formatted string representation of the task list, where each task is stored as a line in the format:
+     *         "[Task Type] | [Completion Status] | [Description] | [Additional Details]".
      */
 
     public static String getWriteString(ArrayList<Task> taskStore) {
@@ -404,9 +412,9 @@ public class Ui implements FlatString {
     }
 
     /**
-     * Method to show user available programs and the
-     * commands available in said program
-     * @param menuType menu to be displayed based on the program
+     * Displays the available menu options to the user.
+     *
+     * @param menuType The type of menu to display ("apps" or "list").
      */
 
     public static void showMenu(String menuType) {

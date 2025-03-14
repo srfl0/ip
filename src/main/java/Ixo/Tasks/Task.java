@@ -37,7 +37,6 @@ public sealed class Task permits Event, Deadline, ToDo {
         return (isDone ? "X" : " ");
     }
 
-    @Override
     public String toString() {
         return "[" + identity + "] [" + getStatusIcon() + "] " + description;
     }
