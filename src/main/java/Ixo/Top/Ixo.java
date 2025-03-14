@@ -1,4 +1,4 @@
-package Ixo.Ui;
+package Ixo.Top;
 
 import Ixo.Parser.Ui;
 import Ixo.Storage.Storage;

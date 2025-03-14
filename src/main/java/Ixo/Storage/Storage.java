@@ -53,29 +53,32 @@ public record Storage(String filePath) {
             String[] stringProcessor;
             while (fileScan.hasNextLine()) {
                 lineReader = fileScan.nextLine();
-                stringProcessor = lineReader.split(" \\| ");
+                stringProcessor = lineReader.split(" \\| ", 3);
                 try {
                     switch (stringProcessor[0]) {
                     case "T":
                         tasks.add(new ToDo(stringProcessor[2]));
                         break;
                     case "D":
-                        tasks.add(new Deadline(stringProcessor[2], "by"+stringProcessor[3]));
+                        String[] deadlineContents = stringProcessor[2].split("/by", 2);
+                        tasks.add(new Deadline(deadlineContents[0], "by"+ deadlineContents[1]));
                         break;
                     case "E":
-                        tasks.add(new Event(stringProcessor[2], "from"+stringProcessor[3], "to"+stringProcessor[4]));
+                        String[] eventFrom = stringProcessor[2].split("/from", 2);
+                        String[] eventTo = stringProcessor[2].split("/to", 2);
+                        tasks.add(new Event(eventFrom[0], "from"+eventFrom[1], "to"+eventTo[1]));
                         break;
                     default:
                         tasks.add(null);
                         break;
                     }
-                    tasks.get(tasks.size()-1).setDone((stringProcessor[1].equals("X")));
-                } catch (NullPointerException e) {
+                    tasks.get(tasks.size()-1).setDone((stringProcessor[1].equals("X"))); //-1 to account for last number in taskList
+                } catch (ArrayIndexOutOfBoundsException e) {
                     fileScan.close();
-                    return null;
+                    return tasks;
                 }
-                fileScan.close();
             }
+            fileScan.close();
         } catch (IOException e) {
             e.getMessage();
         }

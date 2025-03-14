@@ -12,4 +12,14 @@ public class NonMatchingParametersException extends RuntimeException {
     public NonMatchingParametersException(boolean more) {
         errorMessage = more ? "You provided too many details for this task." : "You did not provide sufficient details for this task.";
     }
+
+    public NonMatchingParametersException() {
+        errorMessage = "There are too many separators used for this task.";
+    }
+
+
+    public void dispMessage(){
+        System.out.println(errorMessage);
+    }
+
 }

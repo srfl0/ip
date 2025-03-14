@@ -5,7 +5,7 @@ import Ixo.Tasks.Task;
 import Ixo.Tasks.Deadline;
 import Ixo.Tasks.Event;
 import Ixo.Tasks.ToDo;
-import Ixo.Ui.FlatString;
+import Ixo.Top.FlatString;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -48,7 +48,7 @@ public class Ui implements FlatString {
             System.out.println(FlatString.SEPARATOR);
             lineScan = inpScan;
             System.out.print("");
-            inputLine = lineScan.nextLine().split(" ", FlatString.TASK_CONTENT_COUNT);
+            inputLine = lineScan.nextLine().split(" ", FlatString.EXPECTED_TASK_LENGTH);
             cmd = inputLine[0].toLowerCase();
 
             switch (cmd) {
@@ -86,13 +86,16 @@ public class Ui implements FlatString {
             case "deadline":
             case "3":
                 try {
-                    content = inputLine[1].split("/", FlatString.EXPECTED_DEADLINE_TASK_CONTENT_COUNT);
+                    content = inputLine[1].split("/", FlatString.EXPECTED_DEADLINE_LENGTH);
 
                     String desc = content[0].trim();
                     String by = content[1].trim();
 
-                    if (content.length != FlatString.EXPECTED_DEADLINE_TASK_CONTENT_COUNT || by.isEmpty()) {
-                        throw new NonMatchingParametersException(content.length > FlatString.EXPECTED_DEADLINE_TASK_CONTENT_COUNT);
+                    if (content.length != FlatString.EXPECTED_DEADLINE_LENGTH || by.isEmpty()) {
+                        throw new NonMatchingParametersException(content.length > FlatString.EXPECTED_DEADLINE_LENGTH);
+                    }
+                    else if (by.split("/by").length > EXPECTED_BY_FIELD_COUNT) {
+                        throw new NonMatchingParametersException();
                     }
 
                     Deadline newDeadline = new Deadline(desc, by);
@@ -101,29 +104,35 @@ public class Ui implements FlatString {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println("There are missing fields for a deadline.");
                 } catch (NonMatchingParametersException e) {
-                    System.out.println(e.errorMessage);
+                    e.dispMessage();
                 }
                 break;
 
             case "event":
             case "4":
                 try {
-                    content = inputLine[1].split("/", FlatString.EXPECTED_EVENT_TASK_CONTENT_COUNT);
+                    content = inputLine[1].split("/", FlatString.EXPECTED_EVENT_LENGTH);
                     String desc = content[0].trim();
                     String from = content[1].trim();
                     String to = content[2].trim();
 
-                    if (content.length != FlatString.EXPECTED_EVENT_TASK_CONTENT_COUNT || from.isEmpty() || to.isEmpty()) {
-                        throw new NonMatchingParametersException(content.length > FlatString.EXPECTED_EVENT_TASK_CONTENT_COUNT);
+                    if (content.length != FlatString.EXPECTED_EVENT_LENGTH || from.isEmpty() || to.isEmpty()) {
+                        throw new NonMatchingParametersException(content.length > FlatString.EXPECTED_EVENT_LENGTH);
+                    }
+                    else if ((from.split("/from").length > EXPECTED_FROM_FIELD_COUNT) ||
+                            (to.split("/to").length > EXPECTED_TO_FIELD_COUNT)) {
+                        throw new NonMatchingParametersException();
                     }
 
                     Event newEvent = new Event(desc, from, to);
                     taskStore.add(newEvent);
                     addTaskText(taskStore, "event");
+
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println("There are missing fields for an event");
+
                 } catch (NonMatchingParametersException e) {
-                    System.out.println(e.errorMessage);
+                    e.dispMessage();
                 }
                 break;
 
@@ -291,7 +300,7 @@ public class Ui implements FlatString {
         System.out.println("Okay, I have added this " + taskType + ":");
         System.out.println("\t" + taskStore.get(taskStore.size()-1));
         int storeSize = taskStore.size() - 1; //correctly reflect number of tasks in the list after adding dummy task
-        System.out.println("Now you have " + storeSize + " task" + ((storeSize == 1) ? " " : "s ") + "in the list."); //
+        System.out.println("Now you have " + storeSize + " task" + ((storeSize == 1) ? " " : "s ") + "in the list.");
     }
 
     /**
@@ -322,7 +331,7 @@ public class Ui implements FlatString {
                             .append(d.getStatusIcon())
                             .append(" | ")
                             .append(d.getDescription())
-                            .append(" | ")
+                            .append(" /by ")
                             .append(d.getBy());
                     break;
 
@@ -333,9 +342,9 @@ public class Ui implements FlatString {
                             .append(e.getStatusIcon())
                             .append(" | ")
                             .append(e.getDescription())
-                            .append(" | ")
+                            .append(" /from ")
                             .append(e.getFrom())
-                            .append(" | ")
+                            .append(" /to ")
                             .append(e.getTo());
                     break;
 
